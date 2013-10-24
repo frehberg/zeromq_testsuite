@@ -1,0 +1,57 @@
+ZeroMQ Testsuite
+
+This is the ZeroMQ testsuite based on RobotFramework test-framework.
+
+The intention of this project is to create a portable ZeroMQ testsuite
+being used on various target systems and environments.
+
+ØMQ (also known as ZeroMQ, 0MQ, or zmq) looks like an embeddable
+networking library but acts like a concurrency framework. It gives you
+sockets that carry atomic messages across various transports like
+in-process, inter-process, TCP, and multicast. You can connect sockets
+N-to-N with patterns like fan-out, pub-sub, task distribution, and
+request-reply. It's fast enough to be the fabric for clustered
+products. Its asynchronous I/O model gives you scalable multicore
+applications, built as asynchronous message-processing tasks. It has a
+score of language APIs and runs on most operating systems. ØMQ is from
+iMatix and is LGPLv3 open source.
+
+Robot Framework is a generic test automation framework for acceptance
+testing and acceptance test-driven development (ATDD). It has
+easy-to-use tabular test data syntax and it utilizes the
+keyword-driven testing approach. Its testing capabilities can be
+extended by test libraries implemented either with Python or Java, and
+users can create new higher-level keywords from existing ones using
+the same syntax that is used for creating test cases.
+
+Please see the following projects to get to know more about both
+projects:
+
+* http://zeromq.org/
+* http://robotframework.org/
+
+
+### Installation
+1) Follow RobotFramework installation guide
+
+2) Check out this project, and set the environment variable pointing
+to your libzmq workspace
+
+   git clone https://github.com/frehberg/zeromq_testsuite.git
+
+   export LIBZMQ_ROOT=<root directory of your compiled libzmq project>
+
+   cd zeromq_testsuite
+
+   make tests
+
+The time writing this testsuite just invokes colocal tests being
+shipped with libzmq, in near future distributed tests shall be added.
+
+The result of the test-excution are output.xml, log.html and
+report.html. With Webbrowser you can open the report.html to browse
+each test-case.
+
+
+
+

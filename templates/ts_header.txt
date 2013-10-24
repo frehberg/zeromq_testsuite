@@ -1,0 +1,8 @@
+*** Settings ***
+Library    Process
+Test Template       Run Test
+Suite Teardown    Terminate All Processes    kill=True
+	
+*** Variables ***
+
+*** Test Cases ***   EXECUTABLE
