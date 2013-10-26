@@ -4,5 +4,7 @@ Test Template       Run Test
 Suite Teardown    Terminate All Processes    kill=True
 	
 *** Variables ***
+${LIBZMQ_ROOT}   %{LIBZMQ_ROOT}
+
 
 *** Test Cases ***   EXECUTABLE

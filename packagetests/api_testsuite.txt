@@ -1,0 +1,62 @@
+*** Settings ***
+Library    Process
+Test Template       Run Test
+Suite Teardown    Terminate All Processes    kill=True
+Forced Tags    package   api	
+*** Variables ***
+${LIBZMQ_ROOT}   %{LIBZMQ_ROOT}
+
+
+*** Test Cases ***   EXECUTABLE
+test_timeo  ${LIBZMQ_ROOT}/tests/test_timeo
+test_issue_566  ${LIBZMQ_ROOT}/tests/test_issue_566
+test_term_endpoint  ${LIBZMQ_ROOT}/tests/test_term_endpoint
+test_pair_inproc  ${LIBZMQ_ROOT}/tests/test_pair_inproc
+test_monitor  ${LIBZMQ_ROOT}/tests/test_monitor
+test_fork  ${LIBZMQ_ROOT}/tests/test_fork
+test_connect_resolve  ${LIBZMQ_ROOT}/tests/test_connect_resolve
+test_probe_router  ${LIBZMQ_ROOT}/tests/test_probe_router
+test_spec_dealer  ${LIBZMQ_ROOT}/tests/test_spec_dealer
+test_linger  ${LIBZMQ_ROOT}/tests/test_linger
+test_system  ${LIBZMQ_ROOT}/tests/test_system
+test_conflate  ${LIBZMQ_ROOT}/tests/test_conflate
+test_spec_rep  ${LIBZMQ_ROOT}/tests/test_spec_rep
+test_security_plain  ${LIBZMQ_ROOT}/tests/test_security_plain
+test_security_null  ${LIBZMQ_ROOT}/tests/test_security_null
+test_reqrep_inproc  ${LIBZMQ_ROOT}/tests/test_reqrep_inproc
+test_req_correlate  ${LIBZMQ_ROOT}/tests/test_req_correlate
+test_invalid_rep  ${LIBZMQ_ROOT}/tests/test_invalid_rep
+test_immediate  ${LIBZMQ_ROOT}/tests/test_immediate
+test_hwm  ${LIBZMQ_ROOT}/tests/test_hwm
+test_ctx_destroy  ${LIBZMQ_ROOT}/tests/test_ctx_destroy
+test_ctx_options  ${LIBZMQ_ROOT}/tests/test_ctx_options
+test_pair_tcp  ${LIBZMQ_ROOT}/tests/test_pair_tcp
+test_last_endpoint  ${LIBZMQ_ROOT}/tests/test_last_endpoint
+test_spec_req  ${LIBZMQ_ROOT}/tests/test_spec_req
+test_req_relaxed  ${LIBZMQ_ROOT}/tests/test_req_relaxed
+test_inproc_connect  ${LIBZMQ_ROOT}/tests/test_inproc_connect
+test_iov  ${LIBZMQ_ROOT}/tests/test_iov
+test_pair_ipc  ${LIBZMQ_ROOT}/tests/test_pair_ipc
+test_router_mandatory  ${LIBZMQ_ROOT}/tests/test_router_mandatory
+test_reqrep_ipc  ${LIBZMQ_ROOT}/tests/test_reqrep_ipc
+test_reqrep_device  ${LIBZMQ_ROOT}/tests/test_reqrep_device
+test_spec_router  ${LIBZMQ_ROOT}/tests/test_spec_router
+test_abstract_ipc  ${LIBZMQ_ROOT}/tests/test_abstract_ipc
+test_reqrep_tcp  ${LIBZMQ_ROOT}/tests/test_reqrep_tcp
+test_security_curve  ${LIBZMQ_ROOT}/tests/test_security_curve
+test_proxy  ${LIBZMQ_ROOT}/tests/test_proxy
+test_msg_flags  ${LIBZMQ_ROOT}/tests/test_msg_flags
+test_stream  ${LIBZMQ_ROOT}/tests/test_stream
+test_spec_pushpull  ${LIBZMQ_ROOT}/tests/test_spec_pushpull
+test_disconnect_inproc  ${LIBZMQ_ROOT}/tests/test_disconnect_inproc
+test_shutdown_stress  ${LIBZMQ_ROOT}/tests/test_shutdown_stress
+test_sub_forward  ${LIBZMQ_ROOT}/tests/test_sub_forward
+
+*** Keywords ***
+Run Test
+	[Arguments]   ${executable} 
+	 ${process} =    Start Process      ${executable} 
+	${result} =   Wait For Process    ${process}    timeout=30s    handle_timeout=kill
+	Process Should Be Stopped    ${process}
+	Should Be Equal As Integers   ${result.rc}   0      ## should not be SIGKILL (-9) return code 
+	
