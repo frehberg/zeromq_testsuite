@@ -1,4 +1,5 @@
 ZeroMQ Testsuite
+================================
 
 This is the ZeroMQ testsuite based on RobotFramework test-framework.
 
@@ -27,30 +28,101 @@ the same syntax that is used for creating test cases.
 Please see the following projects to get to know more about both
 projects:
 
-* http://zeromq.org/
-* http://robotframework.org/
+- ZeroMQ http://zeromq.org/
+- Robot Framewwork System Test Framework  http://robotframework.org/
+
+Installation and Testing
+-------------------------
+
+1. Install required Python libraries
+
+   Follow RobotFramework installation guide
+   http://robotframework.org. You will require version starting from
+   2.8.2 or from latest version fromrepository (implementing support
+   for timeout for Wait For Process).
+ 
+   If you are familiar with installing Python packages and have pip
+   available, just run the following command:
+
+```
+    sudo pip install robotframework
+```
+
+   If chart diagrams shall be embedded into the test-logs as well, 
+   install svg.charts Python libraries
+
+```
+    sudo pip install svg.charts
+```
 
 
-### Installation
-1) Follow RobotFramework installation guide
+2. Now checkout this project.
 
-2) Check out this project, and set the environment variable pointing
-to your libzmq workspace
-
+```
+   ## Checkout the latest testsuite version from repository
    git clone https://github.com/frehberg/zeromq_testsuite.git
+   
+   ## Enter the directory
+   cd zeromq_testsuit/
+```
 
-   export LIBZMQ_ROOT=<root directory of your compiled libzmq project>
 
-   cd zeromq_testsuite
+3. [For release testing] Prepare your build of LibZMQ and set the
+   folowing environment variables LIBZMQ_ROOT, CFLAGS and CXXFLAGS. 
 
-   make tests
+   If you don't have the libzmq build environment yet, the following
+   command will checkout, build libzmq. The binaries will be installed
+   with prefix PREFIX=${HOME}/opt/
 
-The time writing this testsuite just invokes colocal tests being
-shipped with libzmq, in near future distributed tests shall be added.
+```
+   ### In root directory of zeromq_testsuite/ enter
+   make build-libzmq PREFIX=${HOME}/opt/
+```
 
-The result of the test-excution are output.xml, log.html and
-report.html. With Webbrowser you can open the report.html to browse
-each test-case.
+   In this case the required environment variables would look like:
+
+```
+   export LIBZMQ_ROOT=${PWD}/build/src/libzmq
+   export CFLAGS=-I ${HOME}/opt/include
+   export CXXFLAGS=-L ${HOME}/opt/lib
+```
+ 
+4. Perform the tests. A test-report will be written to the local directory: 
+
+```
+   make test-release
+```
+
+  In case one wants to perform latency tests only, execute the following make task:
+
+```
+   make test-latency
+```
+
+  In case one wants to perform throughput tests only, execute the following make task:
+
+```
+   make test-throughput
+```
+  
+5. Open the test-report with a web-browser for review. The test-report
+   allows you to dig into to investigate which step the testcase did
+   cause the failure.
+
+```
+    firefox  report.html
+```
+
+Once everything has been installed and is in place the step 4+5 can be
+repeated as often as you like.
+
+Roadmap
+-------------------------
+- Implement remote tests being executed on two hosts
+- Implement security tests
+- Implement tests for various wrappers, for example Java
+- Implement tests using ProtoBuf payload encoding and compare with raw encoding
+- Visualize performance test results using Flot-Javascript-Tool. Embedding Javascript logic intot he report.html generating charts based on embedded measurments.
 
 
 

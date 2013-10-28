@@ -1,0 +1,48 @@
+*** Settings ***
+Library    Process
+Library    Chart
+Test Template     Throughput Test For MessageSize
+Suite Teardown    Finalize TestSuite
+Force Tags    release  tcp  throughput
+Documentation   Perform req-rep throughput tests with various payloads, starting from 32 up to 4096 octets
+	
+*** Variables ***
+${LIBZMQ_ROOT}      %{LIBZMQ_ROOT}
+${PERF_DIR}         %{LIBZMQ_ROOT}/perf
+${MESSSAGE_COUNT}  10000
+	
+*** Test Cases ***    
+Throughput Test For MessageSize 00032     32
+Throughput Test For MessageSize 00064     64  
+Throughput Test For MessageSize 00128    128  
+Throughput Test For MessageSize 00256    256  
+Throughput Test For MessageSize 00512    512  
+Throughput Test For MessageSize 01024   1024  
+Throughput Test For MessageSize 02048   2048 
+Throughput Test For MessageSize 04096   4096  
+Throughput Test For MessageSize 08192   8192  
+Throughput Test For MessageSize 16384  16384   
+
+
+*** Keywords ***
+Throughput Test For MessageSize 
+        [Arguments]   ${message_size} 
+	${local_proc} =    Start Process     ${PERF_DIR}/local_thr  tcp://127.0.0.1:5555   ${message_size}   ${MESSSAGE_COUNT}
+	${remote_proc} =    Start Process     ${PERF_DIR}/remote_thr   tcp://127.0.0.1:5555   ${message_size}   ${MESSSAGE_COUNT} 
+	
+        ${result} =   Wait For Process    ${local_proc}    timeout=30s    handle_timeout=kill
+        Process Should Be Stopped    ${local_proc}
+        Should Be Equal As Integers   ${result.rc}   0  
+	Log      ${result.stdout}
+	${match}  ${size}  ${count}  ${mps}  ${mbps} =    Should Match Regexp   ${result.stdout}   	[^\\d]+(\\d+)[^\\d]+(\\d+)[^\\d]+(\\d+)[^\\d]+(\\d+)
+	${result} =   Wait For Process    ${remote_proc}    timeout=30s    handle_timeout=kill
+	Add To Chart  Mesg Count:${MESSSAGE_COUNT}   ${size}  ${count}    ${mps}  ${mbps}
+        Process Should Be Stopped    ${remote_proc}
+        Should Be Equal As Integers   ${result.rc}   0  
+	Log      ${result.stdout}
+
+Finalize TestSuite
+	Print Chart  Throughput [msg/s]  x_axis=0   y_axis=2
+	Print Chart  Throughput [MB/s]  x_axis=0   y_axis=3
+	Terminate All Processes    kill=True
+	

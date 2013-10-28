@@ -1,22 +1,55 @@
+## Makefile
+##
+## 
+.PHONY: check-env build-libzmq build-test-bins test-release test-latency test-thoughput clean 
 
-GEN_LIBZMQ_TESTS_DIR=packagetests
-GEN_LIBZMQ_TESTS_FILE=$(GEN_LIBZMQ_TESTS_DIR)/tests_testsuite.txt
+GEN_LIBZMQ_TESTS_DIR=tests/release/
+GEN_LIBZMQ_TESTS_FILE=$(GEN_LIBZMQ_TESTS_DIR)/api_testsuite.txt
 
-all:
-	make -C lang_c all
+## required for Chart library, also requires svg.charts to be installed
+## >  sudo pip install sv.charts
+PYTHONPATH=$(PWD)/tools
 
-gen: $(GEN_LIBZMQ_TESTS_FILE)
+all: 
+	echo "Usage: make clean|test-release|build-libzmq|build-test-bins|gen-api-testsuite"
 
-$(GEN_LIBZMQ_TESTS_FILE):  templates/ts_header.txt  templates/ts_footer.txt
+check-env:
+ifndef LIBZMQ_ROOT
+	$(error Environment variable LIBZMQ_ROOT is undefined)
+endif
+
+
+## Builds the libzmq and installs to build/ directory or location
+## specified by PREFIX
+build-libzmq:
+	make -f BuildLibZMQ.mk build-libzmq
+
+
+build-test-bins: check-env
+	echo "not implemented yet"
+
+
+gen-api-testsuite:  check-env templates/api_testsuite_footer.txt templates/api_testsuite_header.txt
 	mkdir -p $(GEN_LIBZMQ_TESTS_DIR)
 	rm -f $(GEN_LIBZMQ_TESTS_FILE)
-	cat templates/ts_header.txt >>  $(GEN_LIBZMQ_TESTS_FILE)
+	cat templates/api_testsuite_header.txt >>  $(GEN_LIBZMQ_TESTS_FILE)
 	find  ${LIBZMQ_ROOT}/tests -maxdepth 1 -executable -a -type f -printf '%f  $${LIBZMQ_ROOT}/tests/%f\n'  >>  $(GEN_LIBZMQ_TESTS_FILE)
-	cat templates/ts_footer.txt>>  $(GEN_LIBZMQ_TESTS_FILE)
+	cat templates/api_testsuite_footer.txt>>  $(GEN_LIBZMQ_TESTS_FILE)
 
-tests:  $(GEN_LIBZMQ_TESTS_FILE)
-	pybot  $(GEN_LIBZMQ_TESTS_DIR)
+
+test-release:  check-env
+	pybot  --include release tests/
+
+
+test-latency:  check-env
+	pybot  --include latency tests/
+
+
+test-throughput:  check-env
+	pybot  --include throughput tests/
+
 
 
 clean:
-	rm -rf *~   templates/*~ *.html *.xml  $(GEN_LIBZMQ_TESTS_DIR)/*~
+	rm -rf  *.html *.xml 
+	find . -name "*~" -exec rm -f {} \;  

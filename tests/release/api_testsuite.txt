@@ -2,7 +2,8 @@
 Library    Process
 Test Template       Run Test
 Suite Teardown    Terminate All Processes    kill=True
-Forced Tags    package   api	
+Force Tags   release
+	
 *** Variables ***
 ${LIBZMQ_ROOT}   %{LIBZMQ_ROOT}
 

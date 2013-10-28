@@ -1,0 +1,48 @@
+*** Settings ***
+Library    Process
+Library    Chart
+Test Template     Latency Test For MessageSize
+Suite Teardown    Finalize TestSuite
+Force Tags    release  tcp  latency
+Documentation   Perform req-rep latency tests with various payloads, starting from 32 up to 4096 octets
+	
+*** Variables ***
+${LIBZMQ_ROOT}      %{LIBZMQ_ROOT}
+${PERF_DIR}         %{LIBZMQ_ROOT}/perf
+${ROUNDTRIP_COUNT}  4096
+	
+*** Test Cases ***    
+Latency Test For MessageSize 00032     32
+Latency Test For MessageSize 00064     64  
+Latency Test For MessageSize 00128    128  
+Latency Test For MessageSize 00256    256  
+Latency Test For MessageSize 00512    512  
+Latency Test For MessageSize 01024   1024  
+Latency Test For MessageSize 02048   2048 
+Latency Test For MessageSize 04096   4096  
+Latency Test For MessageSize 08192   8192  
+Latency Test For MessageSize 16384  16384
+
+
+*** Keywords ***
+Latency Test For MessageSize 
+        [Arguments]   ${message_size} 
+	${local_proc} =    Start Process     ${PERF_DIR}/local_lat   tcp://127.0.0.1:5555   ${message_size}   ${ROUNDTRIP_COUNT}
+	${remote_proc} =    Start Process     ${PERF_DIR}/remote_lat   tcp://127.0.0.1:5555   ${message_size}   ${ROUNDTRIP_COUNT} 
+	
+        ${result} =   Wait For Process    ${local_proc}    timeout=30s    handle_timeout=kill
+        Process Should Be Stopped    ${local_proc}
+        Should Be Equal As Integers   ${result.rc}   0  
+	Log      ${result.stdout}
+	${result} =   Wait For Process    ${remote_proc}    timeout=30s    handle_timeout=kill
+        Process Should Be Stopped    ${remote_proc}
+        Should Be Equal As Integers   ${result.rc}   0  
+	Log      ${result.stdout}
+	${match}  ${size}  ${count}  ${lat} =    Should Match Regexp   ${result.stdout}   	[^\\d]+(\\d+)[^\\d]+(\\d+)[^\\d]+(\\d+)
+	Add To Chart  Mesg Count:${ROUNDTRIP_COUNT}   ${size}  ${count}    ${lat} 
+
+
+Finalize TestSuite
+	Print Chart  Latency [us]  x_axis=0   y_axis=2
+	Terminate All Processes    kill=True
+	
