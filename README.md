@@ -1,4 +1,4 @@
-ZeroMQ Testsuite
+ZeroMQ QA Testsuite (ZMQA)
 ================================
 
 This is the ZeroMQ testsuite based on RobotFramework test-framework.
@@ -35,7 +35,7 @@ Prerequisites
 -------------------------
 The following command installs the required libraries for Ubuntu-12.04 and later to build libzmq and corresponding test binaries. (otherwise "make build-libzmq" might fail)
 ```
-sudo apt-get install autogen libtool autoconf libpgm-dev gcc g++ gdb
+sudo apt-get install autogen libtool autoconf libpgm-dev gcc g++ gdb python-pip
 ```
 
 Installation and Testing
