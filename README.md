@@ -50,19 +50,16 @@ Installation and Testing
    If you are familiar with installing Python packages and have pip
    available, just run the following command:
 ```
-    sudo pip install robotframework
+   sudo pip install robotframework
 ```
-
    If chart diagrams shall be embedded into the test-logs as well, 
    install svg.charts Python libraries. [docs/screenshot-report.png](docs/screenshot-report.png)
 
    Note: Please install version 2.0.4 and avoid version 2.1 as the
    latter package lacks a file (readme.txt) and can not be installed.
-
 ``` 
-sudo pip install svg.charts=2.0.4 
+   sudo pip install svg.charts=2.0.4 
 ```
-
 
 2. Now checkout this project.
 ```
@@ -96,14 +93,11 @@ sudo pip install svg.charts=2.0.4
 ```
    make test-release
 ```
-
-  In case one wants to perform latency tests only, execute the following make task:
-
+   In case one wants to perform latency tests only, execute the following make task:
 ```
    make test-latency
 ```
-
-  In case one wants to perform throughput tests only, execute the following make task:
+   In case one wants to perform throughput tests only, execute the following make task:
 ```
    make test-throughput
 ```
