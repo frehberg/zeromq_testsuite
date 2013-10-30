@@ -1,0 +1,59 @@
+##    Copyright (c) 2007-2013 Contributors as noted in the AUTHORS file
+##
+##    This file is part of 0MQ-Testsuite.
+##
+##    0MQ-Testsuite is free software; you can redistribute it and/or
+##    modify it under the terms of the GNU Lesser General Public License
+##    as published by the Free Software Foundation; either version 3 of
+##    the License, or (at your option) any later version.
+##
+##    0MQ-Testsuite is distributed in the hope that it will be useful,
+##    but WITHOUT ANY WARRANTY; without even the implied warranty of
+##    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+##    Lesser General Public License for more details.
+##
+##    You should have received a copy of the GNU Lesser General Public License
+##    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*** Settings ***
+Library    ProcessEx
+Library    Chart
+Test Template     Throughput Test For MessageSize
+Suite Teardown    Finalize TestSuite
+Force Tags    release  inproc  throughput
+Documentation   Perform req-rep throughput inproc tests with various payloads, starting from 32 up to 16384 octets
+	
+*** Variables ***
+${LIBZMQ_ROOT}      %{LIBZMQ_ROOT}
+${PERF_DIR}         %{LIBZMQ_ROOT}/perf
+${MESSSAGE_COUNT}  10000
+	
+*** Test Cases ***    
+Throughput Test For MessageSize 00032     32
+Throughput Test For MessageSize 00064     64  
+Throughput Test For MessageSize 00128    128  
+Throughput Test For MessageSize 00256    256  
+Throughput Test For MessageSize 00512    512  
+Throughput Test For MessageSize 01024   1024  
+Throughput Test For MessageSize 02048   2048 
+Throughput Test For MessageSize 04096   4096  
+Throughput Test For MessageSize 08192   8192  
+Throughput Test For MessageSize 16384  16384   
+
+
+*** Keywords ***
+Throughput Test For MessageSize 
+        [Arguments]   ${message_size} 
+	${inproc_proc} =    Start Process     ${PERF_DIR}/inproc_thr    ${message_size}   ${MESSSAGE_COUNT}
+        ${result} =   Wait For Process Or Kill   ${inproc_proc}    timeout=30s    handle_timeout=kill
+        Process Should Be Stopped    ${inproc_proc}
+        Should Be Equal As Integers   ${result.rc}   0  
+	Log      ${result.stdout}
+	${match}  ${size}  ${count}  ${mps}  ${mbps} =    Should Match Regexp   ${result.stdout}   	[^\\d]+(\\d+)[^\\d]+(\\d+)[^\\d]+(\\d+)[^\\d]+(\\d+)
+	Add To Chart  Mesg Count:${MESSSAGE_COUNT}   ${size}  ${count}    ${mps}  ${mbps}
+
+Finalize TestSuite
+	Print Chart  Throughput [msg/s]  x_axis=0   y_axis=2
+	Print Chart  Throughput [MB/s]  x_axis=0   y_axis=3
+	Terminate All Processes    kill=True
+	

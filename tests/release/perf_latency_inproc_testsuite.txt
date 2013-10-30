@@ -20,8 +20,8 @@ Library    ProcessEx
 Library    Chart
 Test Template     Latency Test For MessageSize
 Suite Teardown    Finalize TestSuite
-Force Tags    release  tcp  latency
-Documentation   Perform req-rep latency tests with various payloads, starting from 32 up to 16384 octets
+Force Tags    release  inproc  latency 
+Documentation   Perform req-rep inproc latency tests with various payloads, starting from 32 up to 16384 octets
 	
 *** Variables ***
 ${LIBZMQ_ROOT}      %{LIBZMQ_ROOT}
@@ -44,15 +44,9 @@ Latency Test For MessageSize 16384  16384
 *** Keywords ***
 Latency Test For MessageSize 
         [Arguments]   ${message_size} 
-	${local_proc} =    Start Process     ${PERF_DIR}/local_lat   tcp://127.0.0.1:5555   ${message_size}   ${ROUNDTRIP_COUNT}
-	${remote_proc} =    Start Process     ${PERF_DIR}/remote_lat   tcp://127.0.0.1:5555   ${message_size}   ${ROUNDTRIP_COUNT} 
-	
-        ${result} =   Wait For Process Or Kill    ${local_proc}    timeout=30s    handle_timeout=kill
-        Process Should Be Stopped    ${local_proc}
-        Should Be Equal As Integers   ${result.rc}   0  
-	Log      ${result.stdout}
-	${result} =   Wait For Process Or Kill    ${remote_proc}    timeout=30s    handle_timeout=kill
-        Process Should Be Stopped    ${remote_proc}
+	${inproc_proc} =    Start Process     ${PERF_DIR}/inproc_lat   ${message_size}   ${ROUNDTRIP_COUNT}
+        ${result} =   Wait For Process Or Kill    ${inproc_proc}    timeout=30s    handle_timeout=kill
+        Process Should Be Stopped    ${inproc_proc}
         Should Be Equal As Integers   ${result.rc}   0  
 	Log      ${result.stdout}
 	${match}  ${size}  ${count}  ${lat} =    Should Match Regexp   ${result.stdout}   	[^\\d]+(\\d+)[^\\d]+(\\d+)[^\\d]+(\\d+)

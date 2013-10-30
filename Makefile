@@ -65,5 +65,5 @@ test-throughput:  check-env
 
 
 clean:
-	rm -rf  *.html *.xml 
+	rm -rf  *.html *.xml  tools/*.pyc
 	find . -name "*~" -exec rm -f {} \;  
