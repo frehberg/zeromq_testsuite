@@ -17,6 +17,8 @@
 
 from robot.api import logger
 from Process import *
+from robot.utils import (timestr_to_secs)
+from time import (time, sleep)
 
 class ProcessEx (Process):
 

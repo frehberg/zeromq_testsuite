@@ -31,6 +31,13 @@ projects:
 - ZeroMQ http://zeromq.org/
 - Robot Framewwork System Test Framework  http://robotframework.org/
 
+Prerequisites
+-------------------------
+The following command installs the required libraries for Ubuntu-12.04 and later to build libzmq and corresponding test binaries. (otherwise "make build-libzmq" might fail)
+```
+sudo apt-get install autogen libtool autoconf libpgm-dev gcc g++ gdb
+```
+
 Installation and Testing
 -------------------------
 
@@ -42,21 +49,22 @@ Installation and Testing
  
    If you are familiar with installing Python packages and have pip
    available, just run the following command:
-
 ```
     sudo pip install robotframework
 ```
 
    If chart diagrams shall be embedded into the test-logs as well, 
-   install svg.charts Python libraries
+   install svg.charts Python libraries. [docs/screenshot-report.png](docs/screenshot-report.png)
 
-```
-    sudo pip install svg.charts
+   Note: Please install version 2.0.4 and avoid version 2.1 as the
+   latter package lacks a file (readme.txt) and can not be installed.
+
+``` 
+sudo pip install svg.charts=2.0.4 
 ```
 
 
 2. Now checkout this project.
-
 ```
    ## Checkout the latest testsuite version from repository
    git clone https://github.com/frehberg/zeromq_testsuite.git
@@ -72,14 +80,12 @@ Installation and Testing
    If you don't have the libzmq build environment yet, the following
    command will checkout, build libzmq. The binaries will be installed
    with prefix PREFIX=${HOME}/opt/
-
 ```
    ### In root directory of zeromq_testsuite/ enter
    make build-libzmq PREFIX=${HOME}/opt/
 ```
 
    In this case the required environment variables would look like:
-
 ```
    export LIBZMQ_ROOT=${PWD}/build/src/libzmq
    export CFLAGS=-I ${HOME}/opt/include
@@ -87,7 +93,6 @@ Installation and Testing
 ```
  
 4. Perform the tests. A test-report will be written to the local directory: 
-
 ```
    make test-release
 ```
@@ -99,7 +104,6 @@ Installation and Testing
 ```
 
   In case one wants to perform throughput tests only, execute the following make task:
-
 ```
    make test-throughput
 ```
@@ -107,7 +111,6 @@ Installation and Testing
 5. Open the test-report with a web-browser for review. The test-report
    allows you to dig into to investigate which step the testcase did
    cause the failure.
-
 ```
     firefox  report.html
 ```
