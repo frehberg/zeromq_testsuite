@@ -16,7 +16,7 @@
 ##    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *** Settings ***
-Library    Process
+Library    ProcessEx
 Test Template       Run Test
 Suite Teardown    Terminate All Processes    kill=True
 Force Tags   release
@@ -74,7 +74,7 @@ test_sub_forward  ${LIBZMQ_ROOT}/tests/test_sub_forward
 Run Test
 	[Arguments]   ${executable} 
 	 ${process} =    Start Process      ${executable} 
-	${result} =   Wait For Process    ${process}    timeout=30s    handle_timeout=kill
+	${result} =   Wait For Process Or Kill    ${process}    timeout=30s    handle_timeout=kill
 	Process Should Be Stopped    ${process}
 	Should Be Equal As Integers   ${result.rc}   0      ## should not be SIGKILL (-9) return code 
 	

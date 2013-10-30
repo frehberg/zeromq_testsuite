@@ -16,7 +16,7 @@
 ##    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *** Settings ***
-Library    Process
+Library    ProcessEx
 Library    Chart
 Test Template     Throughput Test For MessageSize
 Suite Teardown    Finalize TestSuite
@@ -47,12 +47,12 @@ Throughput Test For MessageSize
 	${local_proc} =    Start Process     ${PERF_DIR}/local_thr  tcp://127.0.0.1:5555   ${message_size}   ${MESSSAGE_COUNT}
 	${remote_proc} =    Start Process     ${PERF_DIR}/remote_thr   tcp://127.0.0.1:5555   ${message_size}   ${MESSSAGE_COUNT} 
 	
-        ${result} =   Wait For Process    ${local_proc}    timeout=30s    handle_timeout=kill
+        ${result} =   Wait For Process Or Kill   ${local_proc}    timeout=30s    handle_timeout=kill
         Process Should Be Stopped    ${local_proc}
         Should Be Equal As Integers   ${result.rc}   0  
 	Log      ${result.stdout}
 	${match}  ${size}  ${count}  ${mps}  ${mbps} =    Should Match Regexp   ${result.stdout}   	[^\\d]+(\\d+)[^\\d]+(\\d+)[^\\d]+(\\d+)[^\\d]+(\\d+)
-	${result} =   Wait For Process    ${remote_proc}    timeout=30s    handle_timeout=kill
+	${result} =   Wait For Process Or Kill    ${remote_proc}    timeout=30s    handle_timeout=kill
 	Add To Chart  Mesg Count:${MESSSAGE_COUNT}   ${size}  ${count}    ${mps}  ${mbps}
         Process Should Be Stopped    ${remote_proc}
         Should Be Equal As Integers   ${result.rc}   0  

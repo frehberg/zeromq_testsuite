@@ -38,8 +38,7 @@ Installation and Testing
 
    Follow RobotFramework installation guide
    http://robotframework.org. You will require version starting from
-   2.8.2 or from latest version fromrepository (implementing support
-   for timeout for Wait For Process).
+   2.8.1 or from latest version fromrepository.
  
    If you are familiar with installing Python packages and have pip
    available, just run the following command:
@@ -120,10 +119,10 @@ Roadmap
 -------------------------
 - Implement remote tests being executed on two hosts
 - Implement security tests
+- Cover the test-apps of zeromq/issues/ as regression tests
 - Implement tests for various wrappers, for example Java
 - Implement tests using ProtoBuf payload encoding and compare with raw encoding
-- Visualize performance test results using Flot-Javascript-Tool. Embedding Javascript logic intot he report.html generating charts based on embedded measurments.
-
+- Improve the SVG chart-diagram processor, embedding SVG into the report.html wihtout external files or dependencies.
 
 
 

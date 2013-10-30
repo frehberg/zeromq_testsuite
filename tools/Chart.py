@@ -24,8 +24,6 @@ except ImportError:
 class Chart:
     ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
 
-    fields = ['Internet', 'TV', 'Newspaper', 'Magazine', 'Radio']
-    
     def __init__(self):
         self._value_list = {}
 
@@ -36,7 +34,7 @@ class Chart:
 
 
     def _vertical_bars(self, title, x_axis, y_axis):
-
+        
         try:
             x_labels = map(lambda dataset: dataset[x_axis], self._value_list.values()[0])
 
@@ -55,6 +53,8 @@ class Chart:
             return g.burn()
 
         except NameError, e:
+            ## Failed to import svg.charts library, unable to create a
+            ## chart-diagram. Instead return hand-made SVG with error message.
             return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1"  width="640" viewBox="0 0 640 480" height="480"><text x="10" y="20" font-size="18" style="fill:red;"><tspan x="10" y="45">Warning: failed to generate SVG chart diagram.</tspan><tspan x="10" y="85">Missing python library svg.charts, perform:</tspan> <tspan x="10" y="125">sudo pip install svg.charts</tspan> </text> </svg>'
  
 
