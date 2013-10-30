@@ -15,7 +15,7 @@
 ##    You should have received a copy of the GNU Lesser General Public License
 ##    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.PHONY: check-env build-libzmq build-test-bins test-release test-latency test-thoughput clean 
+.PHONY: check-env build-libzmq build-test-bins test-release test-latency test-throughput clean 
 
 GEN_LIBZMQ_TESTS_DIR=tests/release/
 GEN_LIBZMQ_TESTS_FILE=$(GEN_LIBZMQ_TESTS_DIR)/api_testsuite.txt
