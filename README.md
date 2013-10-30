@@ -52,9 +52,8 @@ Installation and Testing
 ```
    sudo pip install robotframework
 ```
-   If chart diagrams shall be embedded into the test-logs as well, 
-   install svg.charts Python libraries. [docs/screenshot-report.png](docs/screenshot-report.png)
-
+   If chart diagrams shall be embedded into the test-logs as well (see [docs/screenshot-report.png](docs/screenshot-report.png)), 
+   install svg.charts Python libraries. 
    Note: Please install version 2.0.4 and avoid version 2.1 as the
    latter package lacks a file (readme.txt) and can not be installed.
 ``` 
