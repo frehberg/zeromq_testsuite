@@ -74,11 +74,14 @@ Installation and Testing
    folowing environment variables LIBZMQ_ROOT, CFLAGS and CXXFLAGS. 
 
    If you don't have the libzmq build environment yet, the following
-   command will checkout, build libzmq. The binaries will be installed
+   command will checkout, build libzmq. 
+   The make-command below  would  check out the sources to  
+   {zeromq_testsuit}/build/src/libzmq and the binaries would be installed
    with prefix PREFIX=${HOME}/opt/
 ```
    ### In root directory of zeromq_testsuite/ enter
-   make build-libzmq PREFIX=${HOME}/opt/
+   cd zeromq_testsuit/
+   make build-libzmq PREFIX=${HOME}/opt
 ```
 
    In this case the required environment variables would look like:
