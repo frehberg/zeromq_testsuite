@@ -79,7 +79,7 @@ Installation and Testing
    {zeromq_testsuit}/build/src/libzmq and the binaries would be installed
    with prefix PREFIX=${HOME}/opt/
 ```
-   ### In root directory of zeromq_testsuite/ enter
+   ### enter the root directory of zeromq_testsuite/ and download and build libzmq
    cd zeromq_testsuit/
    make build-libzmq PREFIX=${HOME}/opt
 ```
