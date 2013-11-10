@@ -35,7 +35,7 @@ Prerequisites
 -------------------------
 The following command installs the required libraries for Ubuntu-12.04 and later to build libzmq and corresponding test binaries. (otherwise "make build-libzmq" might fail)
 ```
-sudo apt-get install autogen libtool autoconf libpgm-dev gcc g++ gdb python-pip
+sudo apt-get install autogen libtool autoconf libpgm-dev gcc g++ gdb python-pip git
 ```
 
 Installation and Testing
@@ -54,10 +54,8 @@ Installation and Testing
 ```
    If chart diagrams shall be embedded into the test-logs as well (see [docs/screenshot-report.png](docs/screenshot-report.png)), 
    install svg.charts Python libraries. 
-   Note: Please install version 2.0.4 and avoid version 2.1 as the
-   latter package lacks a file (readme.txt) and can not be installed.
 ``` 
-   sudo pip install svg.charts=2.0.4 
+   sudo pip install svg.charts
 ```
 
 2. Now checkout this project.
